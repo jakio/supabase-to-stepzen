@@ -1,0 +1,18 @@
+type Author {
+  id: ID!
+  name: String!
+  isPseudonym: Boolean!
+}
+type Query {
+  author(id: ID!): Author
+    @dbquery(type: "postgresql", table: "authors", configuration: "PostgreSQL_config")
+  authors(isPseudonym: Boolean!): [Author]
+    @dbquery(
+        type: "postgresql",
+        query: "SELECT * FROM authors WHERE isPseudonym = $1",
+        configuration: "PostgreSQL_config"
+    )
+
+    
+}
+

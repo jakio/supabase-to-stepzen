@@ -1,0 +1,20 @@
+type Book {
+  id: ID!
+  name: String!
+  originalPublishingDate: Date!
+  authorID: ID!
+  @materializer(
+        query: "author"
+        arguments: [{ name: "id" field: "authorID"}]
+  )
+}
+type Query {
+  book(id: ID!): Book
+        @dbquery(type: "postgresql", table: "books", configuration: "PostgreSQL_config")
+  books(originalPublishingDate: Date!): [Book]
+
+  booksPublishedSince(since:Date!): [Book]
+        @dbquery(type: "postgresql",
+            query: "SELECT * FROM books WHERE originalPublishingDate > $1 ",
+            configuration: "PostgreSQL_config")
+}
